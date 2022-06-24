@@ -15,7 +15,9 @@ import org.springframework.data.elasticsearch.annotations.Document;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "posts")
@@ -74,24 +76,26 @@ public class Post implements Serializable {
     @JoinColumn(name = "post_id")
     private List<PostMeta> postMeta_save;
 
-        @OneToMany
-    @JoinColumn(name = "object_id", updatable = false)
-    @Where(clause = "term_by='post'")
-//    @ManyToMany
-//    @JoinTable(name = "term_relationships",
-//            joinColumns = @JoinColumn(name = "object_id"),
-//            inverseJoinColumns = @JoinColumn(name = "tag_id"))
-//    @WhereJoinTable(clause = "tag_by = 'post'")
-    private List<TermRelationship> postTermFilter;
+    //        @OneToMany
+//    @JoinColumn(name = "object_id", updatable = false)
+//    @Where(clause = "term_by='post'")
+//    private List<TermRelationship> postTermFilter;
+    @ManyToMany
+    @JoinTable(name = "term_relationships",
+            joinColumns = @JoinColumn(name = "object_id"),
+            inverseJoinColumns = @JoinColumn(name = "term_id"))
+    @WhereJoinTable(clause = "term_by = 'post'")
+    private Set<Term> terms = new HashSet<>();
 
-//    @ManyToMany
-//    @JoinTable(name = "tag_relationships",
-//            joinColumns = @JoinColumn(name = "object_id"),
-//            inverseJoinColumns = @JoinColumn(name = "tag_id"))
-//    @WhereJoinTable(clause = "tag_by = 'post'")
-    @OneToMany
-    @JoinColumn(name = "object_id", updatable = false)
-    @Where(clause = "tag_by='post'")
-    private List<TagRelationship> postTagFilter;
+    @ManyToMany
+    @JoinTable(name = "tag_relationships",
+            joinColumns = @JoinColumn(name = "object_id"),
+            inverseJoinColumns = @JoinColumn(name = "tag_id"))
+    @WhereJoinTable(clause = "tag_by = 'post'")
+    private Set<Tag> tags = new HashSet<>();
+//    @OneToMany
+//    @JoinColumn(name = "object_id", updatable = false)
+//    @Where(clause = "tag_by='post'")
+//    private List<TagRelationship> postTagFilter;
 
 }

@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,6 +25,12 @@ public class TestControllersx {
         this.ePostRepository = ePostRepository;
     }
 
+    @RequestMapping("posts/{id}")
+    @Transactional
+    public Object findById(@PathVariable Long id) {
+        return this.postRepository.findById(id).orElse(null);
+    }
+
     @RequestMapping("posts")
     @Transactional
     public Object getPots(@RequestParam int page) {
@@ -34,11 +41,13 @@ public class TestControllersx {
                 try {
                     ePostRepository.save(e);
                 } catch (Exception e1) {
+                    System.out.println("error: " + e.getId());
                     e1.printStackTrace();
                 }
             });
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println("weeerr");
+//            e.printStackTrace();
         }
         postRepository.flush();
         //        new Thread() {

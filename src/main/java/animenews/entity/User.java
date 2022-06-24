@@ -49,18 +49,18 @@ public class User implements Serializable {
     private Boolean userStatus = false;
 
     @Column(name = "display_name", length = 250)
-    private String displayName;
+    private String displayName="";
 
     @Column(name = "user_avatar")
-    private String userAvatar;
+    private String userAvatar="";
 
     @Column(name = "user_description", length = 1000)
-    private String userDescription;
+    private String userDescription ="";
 
     @Column(name = "login_failed")
     private Integer loginFailed = 0;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_authority", joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "authority_id"))
     private Set<Authority> authorityFilter;
